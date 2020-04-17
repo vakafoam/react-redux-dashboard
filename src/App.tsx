@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FC, useEffect } from "react";
+import { connect } from "react-redux";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import "App.css";
+import { GotDataActionI, getDataActionCreator } from "store/actions";
+import { AppStateI } from "store/state";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface PropsI {
+  getData: () => Promise<GotDataActionI>;
+  data: string[];
+  dataLoading: boolean;
+  dataPosting: boolean;
 }
 
-export default App;
+const App: FC<PropsI> = ({ getData, data, dataLoading, dataPosting }) => {
+  useEffect(() => {
+    getData();
+  }, []);
+
+  return (
+    <div className="App">
+      <header className="App-header">App header</header>
+      <section>
+        {dataLoading && <div>Loading...</div>}
+        <ul>
+          {console.log(data)}
+          {data.map((d, i) => (
+            <li key={`data_${i}`}>{d}</li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  );
+};
+
+const mapStateToProps = (store: AppStateI) => {
+  return {
+    data: store.dataState.data,
+    dataLoading: store.dataState.loading,
+    dataPosting: store.dataState.posting
+  };
+};
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    getData: () => dispatch(getDataActionCreator())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
