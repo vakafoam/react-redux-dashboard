@@ -2,7 +2,7 @@ import React, { FC, useEffect } from "react";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import "App.css";
+import "App.scss";
 import { GotDataActionI, getDataActionCreator } from "store/actions";
 import { AppStateI } from "store/state";
 
@@ -26,7 +26,9 @@ const App: FC<PropsI> = ({ getData, data, dataLoading, dataPosting }) => {
         <ul>
           {console.log(data)}
           {data.map((d, i) => (
-            <li key={`data_${i}`}>{d}</li>
+            <li className="listItem" key={`data_${i}`}>
+              {d}
+            </li>
           ))}
         </ul>
       </section>
