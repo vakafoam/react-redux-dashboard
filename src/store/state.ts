@@ -1,17 +1,17 @@
-import { DataType } from "store/actions";
+import { MusicEventI } from "MusicEvents";
 
-export interface DataStateI {
-  readonly data: DataType[];
+export interface MusicEventStateI {
+  readonly musicEvents: MusicEventI[];
   readonly loading: boolean;
   readonly posting: boolean;
 }
 
 export interface AppStateI {
-  readonly dataState: DataStateI;
+  readonly musicEventState: MusicEventStateI;
 }
 
-export const initialDataState: DataStateI = {
-  data: [],
+export const initialDataState: MusicEventStateI = {
+  musicEvents: [],
   loading: false,
-  posting: false
+  posting: false,
 };

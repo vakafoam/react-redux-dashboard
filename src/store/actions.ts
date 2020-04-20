@@ -1,20 +1,23 @@
 import { Action, ActionCreator, Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { MusicEventsResponseI, MusicEventI } from "MusicEvents";
+import { getMusicEvents } from "api/data";
 
 export enum ActionType {
-  GETTING_DATA = "GETTING_DATA",
-  GOT_DATA = "GOT_DATA",
+  GETTING_MUSIC_EVENTS = "GETTING_MUSIC_EVENTS",
+  GOT_MUSIC_EVENTS = "GOT_MUSIC_EVENTS",
+
+  // Will need later?
   POSTING_DATA = "POSTING_DATA",
-  POSTED_DATA = "POSTED_DATA"
+  POSTED_DATA = "POSTED_DATA",
 }
 
-// define your data structure here
-export type DataType = string;
+export interface GettingMusicEventsActionI
+  extends Action<ActionType.GETTING_MUSIC_EVENTS> {}
 
-export interface GettingDataActionI extends Action<ActionType.GETTING_DATA> {}
-
-export interface GotDataActionI extends Action<ActionType.GOT_DATA> {
-  data: DataType[];
+export interface GotMusicEventsActionI
+  extends Action<ActionType.GOT_MUSIC_EVENTS> {
+  data: MusicEventI[];
 }
 
 export interface PostingDataActionI extends Action<ActionType.POSTING_DATA> {
@@ -22,43 +25,36 @@ export interface PostingDataActionI extends Action<ActionType.POSTING_DATA> {
 }
 
 export interface PostedDataActionI extends Action<ActionType.POSTED_DATA> {
-  result: string;
+  result: MusicEventI;
 }
 
 export type DataActions =
-  | GettingDataActionI
-  | GotDataActionI
+  | GettingMusicEventsActionI
+  | GotMusicEventsActionI
   | PostingDataActionI
   | PostedDataActionI;
 
-export const getDataActionCreator: ActionCreator<ThunkAction<
+export const getMusicEventsActionCreator: ActionCreator<ThunkAction<
   // The type of the last action to be dispatched - will always be promise<T> for async actions
-  Promise<GotDataActionI>,
+  Promise<GotMusicEventsActionI>,
   // The type for the data within the last action
-  DataType[],
+  MusicEventsResponseI,
   // The type of the parameter for the nested function
   null,
   // The type of the last action to be dispatched
-  GotDataActionI
+  GotMusicEventsActionI
 >> = () => {
   return async (dispatch: Dispatch) => {
-    const gettingDataAction: GettingDataActionI = {
-      type: ActionType.GETTING_DATA
+    const gettingMusicEventsAction: GettingMusicEventsActionI = {
+      type: ActionType.GETTING_MUSIC_EVENTS,
     };
-    dispatch(gettingDataAction);
-    // const data = await getPeopleFromApi();  // API call here
-    const data = await apiCall(); // API call here
-    const gotDataAction: GotDataActionI = {
-      data,
-      type: ActionType.GOT_DATA
+    dispatch(gettingMusicEventsAction);
+    const { result }: { result: MusicEventsResponseI } = await getMusicEvents(); // API call here
+    const events: MusicEventI[] = result._embedded.events;
+    const gotMusicEventsAction: GotMusicEventsActionI = {
+      data: events,
+      type: ActionType.GOT_MUSIC_EVENTS,
     };
-    return dispatch(gotDataAction);
+    return dispatch(gotMusicEventsAction);
   };
 };
-
-async function apiCall(): Promise<DataType[]> {
-  console.log("DATA fetch");
-  return new Promise((res, rej) =>
-    setTimeout(() => res(["10", "20", "30"]), 1000)
-  );
-}

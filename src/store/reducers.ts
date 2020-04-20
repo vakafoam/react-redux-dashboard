@@ -1,36 +1,36 @@
 import { combineReducers, Reducer } from "redux";
 import { ActionType, DataActions } from "store/actions";
-import { AppStateI, initialDataState, DataStateI } from "store/state";
+import { AppStateI, initialDataState, MusicEventStateI } from "store/state";
 
-const dataReducer: Reducer<DataStateI, DataActions> = (
+const musicEventsReducer: Reducer<MusicEventStateI, DataActions> = (
   state = initialDataState,
   action
 ) => {
   switch (action.type) {
-    case ActionType.GETTING_DATA: {
+    case ActionType.GETTING_MUSIC_EVENTS: {
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     }
-    case ActionType.GOT_DATA: {
+    case ActionType.GOT_MUSIC_EVENTS: {
       return {
         ...state,
-        data: action.data,
-        loading: false
+        musicEvents: action.data,
+        loading: false,
       };
     }
     case ActionType.POSTING_DATA: {
       return {
         ...state,
-        posting: true
+        posting: true,
       };
     }
     case ActionType.POSTED_DATA: {
       return {
         ...state,
         posting: false,
-        people: state.data.concat(action.result)
+        musicEvents: state.musicEvents.concat(action.result),
       };
     }
     default:
@@ -43,5 +43,5 @@ const dataReducer: Reducer<DataStateI, DataActions> = (
 const neverReached = (never: never) => {};
 
 export const rootReducer = combineReducers<AppStateI>({
-  dataState: dataReducer
+  musicEventState: musicEventsReducer,
 });
