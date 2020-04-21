@@ -1,4 +1,4 @@
-import { MusicEventI } from "MusicEvents";
+import { MusicEventI } from "components/musicEvents/MusicEvents";
 
 export interface MusicEventStateI {
   readonly musicEvents: MusicEventI[];

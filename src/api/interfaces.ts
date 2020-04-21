@@ -1,7 +1,11 @@
 export interface RequestParametersI {
   path: string;
-  queryParams?: object;
+  queryParams?: QueryParamsI;
   options?: object;
+}
+
+export interface QueryParamsI {
+  keyword?: string; // search word
 }
 
 export interface PostRequestParametersI extends RequestParametersI {

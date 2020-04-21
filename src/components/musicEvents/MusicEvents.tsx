@@ -7,6 +7,8 @@ import {
   GotMusicEventsActionI,
 } from "store/actions";
 import { AppStateI } from "store/state";
+import EventCard from "components/musicEvents/EventCard";
+import "components/musicEvents/musicEvents.scss";
 
 export interface PaginationI {
   size: number;
@@ -20,7 +22,7 @@ export interface MusicEventI {
   type: string;
   id: string;
   url: string;
-  images: object[];
+  images: { ratio: string; url: "string" }[];
   dates: object;
   promoter: object;
   _links: {
@@ -43,7 +45,6 @@ interface PropsI {
   getMusicEvents: () => Promise<GotMusicEventsActionI>;
   musicEvents: MusicEventI[];
   loading: boolean;
-  posting: boolean;
 }
 
 const MusicEvents = ({ getMusicEvents, musicEvents, loading }: PropsI) => {
@@ -51,21 +52,26 @@ const MusicEvents = ({ getMusicEvents, musicEvents, loading }: PropsI) => {
     getMusicEvents();
   }, [getMusicEvents]);
 
-  return (
-    <div>
-      <h1>Music events</h1>
+  const onEventClick = () => {
+    console.log("event clicked");
+  };
 
-      <section>
-        {loading && <div>Loading...</div>}
-        <ul>
-          {musicEvents.map((evnt, i) => (
-            <li className="listItem" key={`data_${i}`}>
-              {evnt.name}
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
+  return (
+    <section className="events">
+      {loading ? (
+        <p className="events__loading">Loading...</p>
+      ) : musicEvents.length ? (
+        musicEvents.map((evnt) => (
+          <EventCard
+            event={evnt}
+            onClick={onEventClick}
+            key={`event_${evnt.id}`}
+          />
+        ))
+      ) : (
+        <span>No results found. Please try different filters</span>
+      )}
+    </section>
   );
 };
 
@@ -73,7 +79,6 @@ const mapStateToProps = (store: AppStateI) => {
   return {
     musicEvents: store.musicEventState.musicEvents,
     loading: store.musicEventState.loading,
-    posting: store.musicEventState.posting,
   };
 };
 

@@ -1,5 +1,6 @@
 import API from "api/API";
-import { MusicEventsResponseI } from "MusicEvents";
+import { MusicEventsResponseI } from "components/musicEvents/MusicEvents";
+import { QueryParamsI } from "api/interfaces";
 
 export const MUSIC_EVENTS =
   "https://app.ticketmaster.com/discovery/v2/events?countryCode=FI&classificationId=KZFzniwnSyZfZ7v7nJ";
@@ -10,10 +11,9 @@ export const MUSIC_GENRES =
 
 const api = new API();
 
-export const getMusicEvents = () =>
-  // queryParams?: ListParams,
+export const getMusicEvents = (queryParams?: QueryParamsI) =>
   api.getJson<MusicEventsResponseI>({
-    // queryParams: {},
+    queryParams,
     // options?: {},
     path: MUSIC_EVENTS,
   });

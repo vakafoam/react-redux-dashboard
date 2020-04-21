@@ -3,7 +3,9 @@ import {
   APIErrorResponseI,
   PostRequestParametersI,
   RequestParametersI,
+  QueryParamsI,
 } from "api/interfaces";
+
 const baseHeaders = { "Content-Type": "application/json; charset=utf-8" };
 
 const parseResponseWithJson = async <ResultType>(
@@ -22,13 +24,30 @@ const parseResponseWithJson = async <ResultType>(
   }
 };
 
+const getQueryParamsString = (
+  apiKey?: string,
+  params?: QueryParamsI
+): string => {
+  let queryString: string = "";
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      queryString += `&${k}=${v}`;
+    }
+  }
+  if (apiKey) {
+    queryString += `&apikey=${apiKey}`;
+  }
+  return queryString;
+};
+
 export default class API {
   private apiKey = process.env.REACT_APP_API_KEY;
 
   async getJson<ResultType>({
     path,
+    queryParams,
   }: RequestParametersI): Promise<{ result: ResultType; headers: Headers }> {
-    const fullPath = `${path}&apikey=${this.apiKey}`; // add query params if needed
+    const fullPath = path + getQueryParamsString(this.apiKey, queryParams);
 
     const defaultOptions = {
       method: "GET",
