@@ -22,7 +22,7 @@ export interface MusicEventI {
   type: string;
   id: string;
   url: string;
-  images: { ratio: string; url: "string" }[];
+  images: { ratio: string; url: string }[];
   dates: object;
   promoter: object;
   _links: {

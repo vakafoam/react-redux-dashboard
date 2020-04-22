@@ -24,12 +24,11 @@ const Header = ({ getMusicEvents }: PropsI) => {
   }, [searchTimeout]);
 
   const debouncedSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
     const input = e.target.value;
     setSearchValue(input);
     if (searchTimeout) clearTimeout(searchTimeout);
     setSearchTimeout(
-      setTimeout(() => getMusicEvents({ keyword: input }), 1000)
+      setTimeout(() => getMusicEvents({ keyword: input }), 2000)
     );
   };
 
