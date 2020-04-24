@@ -33,5 +33,7 @@ it("Headers renders with correct heading text", () => {
     );
   });
 
-  expect(container?.firstChild?.firstChild?.textContent).toBe("Music events");
+  expect(container?.firstChild?.firstChild?.firstChild?.textContent).toBe(
+    "Music events"
+  );
 });

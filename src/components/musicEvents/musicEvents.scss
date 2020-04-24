@@ -1,18 +1,106 @@
+@import "src/components/styleVariables";
+
 .events {
   display: flex;
   justify-content: center;
   flex-basis: 100%;
   flex-wrap: wrap;
-  margin: 20px;
+  margin: 5px;
+
+  @media (min-width: $phoneHorizMin) {
+    margin: 10px;
+  }
+  @media (min-width: $desktopMin) {
+    max-width: 1400px;
+    margin: 20px auto;
+  }
 }
 
 .events__card {
-  width: 300px;
+  position: relative;
+  width: 100%;
   overflow: hidden;
-  margin: 10px;
-  cursor: pointer;
+  margin: 5px;
 
   img {
     width: 100%;
+  }
+
+  @media (min-width: $phoneHorizMin) {
+    width: 46%;
+    margin: 10px;
+  }
+  @media (min-width: $tabletMin) {
+    margin: 10px;
+  }
+  @media (min-width: $desktopMin) {
+    width: 31%;
+  }
+  @media (min-width: $wideDesktopMin) {
+    width: 23%;
+  }
+}
+
+.events__card__details {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background: $background;
+  color: $fontColor;
+  opacity: 0.9;
+
+  .details__heading {
+    font-size: 2em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+
+  .details__venue-link {
+    color: $linkActive;
+  }
+
+  .details__status {
+    width: fit-content;
+    padding: 5px;
+    color: $fontColor;
+    margin: 5px 0;
+
+    &.details__status--active {
+      background: green;
+    }
+    &.details__status--inactive {
+      background: red;
+    }
+    &.details__status--other {
+      background: yellow;
+      color: $background;
+    }
+  }
+
+  .details__icon-text {
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+    .details__icon {
+      margin-right: 5px;
+    }
+  }
+
+  .details__button {
+    position: relative;
+    padding: 10px;
+    margin-top: auto;
+    width: 120px;
+    border: solid 2px $fontColor;
+    background: inherit;
+    color: $fontColor;
+    cursor: pointer;
   }
 }

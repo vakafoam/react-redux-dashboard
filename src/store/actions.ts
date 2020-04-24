@@ -1,11 +1,11 @@
 import { Action, ActionCreator, Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { getMusicEvents } from "api/data";
 import {
   MusicEventsResponseI,
   MusicEventI,
-} from "components/musicEvents/MusicEvents";
-import { getMusicEvents } from "api/data";
-import { QueryParamsI } from "api/interfaces";
+  QueryParamsI,
+} from "api/interfaces";
 
 export enum ActionType {
   GETTING_MUSIC_EVENTS = "GETTING_MUSIC_EVENTS",
@@ -53,12 +53,8 @@ export const getMusicEventsActionCreator: ActionCreator<ThunkAction<
       type: ActionType.GETTING_MUSIC_EVENTS,
     };
     dispatch(gettingMusicEventsAction);
-    const { result }: { result: MusicEventsResponseI } = await getMusicEvents(
-      queryParams
-    ); // API call here
-    const events =
-      result && result._embedded ? result._embedded.events : undefined;
-    const data: MusicEventI[] = events || [];
+    const response = await getMusicEvents(queryParams); // API call here
+    const data: MusicEventI[] = response?.result?._embedded?.events || [];
     const gotMusicEventsAction: GotMusicEventsActionI = {
       data,
       type: ActionType.GOT_MUSIC_EVENTS,

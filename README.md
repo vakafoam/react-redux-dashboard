@@ -1,4 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Music events dashboard
+
+An application to show music events from [Tickmaster](https://developer.ticketmaster.com/products-and-docs/apis/getting-started/) API.
+The app is build with React v16, Redux v4 and Typescript v3.
 
 ## Available Scripts
 

@@ -45,8 +45,11 @@ export default class API {
 
   async getJson<ResultType>({
     path,
-    queryParams,
-  }: RequestParametersI): Promise<{ result: ResultType; headers: Headers }> {
+    queryParams = {},
+    options = {},
+  }: RequestParametersI): Promise<
+    { result: ResultType; headers: Headers } | undefined
+  > {
     const fullPath = path + getQueryParamsString(this.apiKey, queryParams);
 
     const defaultOptions = {
@@ -57,23 +60,26 @@ export default class API {
       },
     };
 
-    const response = await fetch(fullPath, defaultOptions);
+    let response: Response;
+    try {
+      response = await fetch(fullPath, { ...defaultOptions, ...options });
+      if (!response.ok) {
+        const error: APIErrorResponseI = await parseResponseWithJson<
+          APIErrorResponseI
+        >(response);
 
-    if (response.ok) {
+        throw new APIError(error);
+      }
+
       const result = await parseResponseWithJson<ResultType>(response);
 
-      console.log("RES", result);
       return {
         result,
         headers: response.headers,
       };
+    } catch (e) {
+      console.error("Error occured:", e);
     }
-
-    const error: APIErrorResponseI = await parseResponseWithJson<
-      APIErrorResponseI
-    >(response);
-
-    throw new APIError(error);
   }
 
   async postJson<ResultType>({

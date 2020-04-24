@@ -3,9 +3,9 @@ import reduxMockStore from "redux-mock-store";
 import { AnyAction } from "redux";
 import * as actions from "store/actions";
 import fetchMock from "fetch-mock";
-import { MusicEventI } from "components/musicEvents/MusicEvents";
+import { MusicEventI } from "api/interfaces";
 import { initialDataState } from "store/state";
-import { MUSIC_EVENTS } from "api/data";
+import { MUSIC_EVENTS_URL } from "api/data";
 
 const sampleMusicEvent: MusicEventI = {
   name: "Music event",
@@ -13,14 +13,26 @@ const sampleMusicEvent: MusicEventI = {
   id: "12345",
   url: "htpp://example.com",
   images: [{ ratio: "4_3", url: "http://example2.com" }],
-  dates: {},
+  dates: {
+    start: { localDate: "some data", localTime: "some time" },
+    status: { code: "code" },
+  },
   promoter: {},
   _links: {
     self: {
       href: "http://goggle.com",
     },
   },
-  _embedded: {},
+  _embedded: {
+    venues: [
+      {
+        url: "https",
+        city: { name: "Tallinn" },
+        country: { name: "Estonia", countryCode: "EE" },
+        address: { line1: "Tartu mnt" },
+      },
+    ],
+  },
 };
 
 const middlewares = [thunk];
@@ -32,11 +44,14 @@ describe("actions", () => {
   });
 
   it("dispatches gotMusicEventsAction with correct data", () => {
-    fetchMock.mock(`${MUSIC_EVENTS}&apikey=${process.env.REACT_APP_API_KEY}`, {
-      body: {
-        _embedded: { events: [sampleMusicEvent] },
-      },
-    });
+    fetchMock.mock(
+      `${MUSIC_EVENTS_URL}&apikey=${process.env.REACT_APP_API_KEY}`,
+      {
+        body: {
+          _embedded: { events: [sampleMusicEvent] },
+        },
+      }
+    );
 
     const expectedActions = [
       { type: actions.ActionType.GETTING_MUSIC_EVENTS },

@@ -8,6 +8,7 @@ import {
 } from "store/actions";
 import { QueryParamsI } from "api/interfaces";
 import "components/header/header.scss";
+import SearchIcon from "components/icons/SearchIcon";
 
 interface PropsI {
   getMusicEvents: (q: QueryParamsI) => Promise<GotMusicEventsActionI>;
@@ -28,7 +29,10 @@ const Header = ({ getMusicEvents }: PropsI) => {
     setSearchValue(input);
     if (searchTimeout) clearTimeout(searchTimeout);
     setSearchTimeout(
-      setTimeout(() => getMusicEvents({ keyword: input }), 2000)
+      setTimeout(() => {
+        if (input.length !== 0 && input.length < 3) return;
+        getMusicEvents({ keyword: input });
+      }, 1500)
     );
   };
 
@@ -45,6 +49,7 @@ const Header = ({ getMusicEvents }: PropsI) => {
       <div className="header__title-search">
         <h1 className="header__title-search__title">Music events</h1>
         <form>
+          <SearchIcon className="header__search-icon" />
           <input
             type="text"
             name="keyword"
@@ -53,7 +58,16 @@ const Header = ({ getMusicEvents }: PropsI) => {
           />
         </form>
       </div>
-      <div className="header__navigation">Link</div>
+      <ul className="header__navigation">
+        <li className="header__navigation__link header__navigation__link--active">
+          All genres
+        </li>
+        <li className="header__navigation__link">Alternative</li>
+        <li className="header__navigation__link">Ballads/Romantic</li>
+        <li className="header__navigation__link">Blues</li>
+        <li className="header__navigation__link">Chanson Francaise</li>
+        <li className="header__navigation__link">More...</li>
+      </ul>
     </header>
   );
 };
