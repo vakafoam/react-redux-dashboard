@@ -5,6 +5,7 @@ import {
   MusicEventsResponseI,
   MusicEventI,
   QueryParamsI,
+  ClassificationI,
 } from "api/interfaces";
 
 export enum ActionType {
@@ -14,6 +15,15 @@ export enum ActionType {
   // Will need later?
   POSTING_DATA = "POSTING_DATA",
   POSTED_DATA = "POSTED_DATA",
+}
+
+export enum ClassificationActionType {
+  SET_ACTIVE_CLASSIFICATION = "SET_ACTIVE_CLASSIFICATION",
+}
+
+export interface SetClassificationActionI
+  extends Action<ClassificationActionType.SET_ACTIVE_CLASSIFICATION> {
+  activeClassification: ClassificationI;
 }
 
 export interface GettingMusicEventsActionI
@@ -44,21 +54,40 @@ export const getMusicEventsActionCreator: ActionCreator<ThunkAction<
   // The type for the data within the last action
   MusicEventsResponseI,
   // The type of the parameter for the nested function
-  QueryParamsI,
+  [string, QueryParamsI],
   // The type of the last action to be dispatched
   GotMusicEventsActionI
->> = (queryParams?: QueryParamsI) => {
+>> = (clsId?: string, queryParams?: QueryParamsI) => {
   return async (dispatch: Dispatch) => {
     const gettingMusicEventsAction: GettingMusicEventsActionI = {
       type: ActionType.GETTING_MUSIC_EVENTS,
     };
     dispatch(gettingMusicEventsAction);
-    const response = await getMusicEvents(queryParams); // API call here
+    const response = await getMusicEvents(clsId, queryParams); // API call here
     const data: MusicEventI[] = response?.result?._embedded?.events || [];
     const gotMusicEventsAction: GotMusicEventsActionI = {
       data,
       type: ActionType.GOT_MUSIC_EVENTS,
     };
     return dispatch(gotMusicEventsAction);
+  };
+};
+
+export const setClassificationActionCreator: ActionCreator<ThunkAction<
+  // The type of the last action to be dispatched - will always be promise<T> for async actions
+  Promise<SetClassificationActionI>,
+  // The type for the data within the last action
+  null,
+  // The type of the parameter for the nested function
+  ClassificationI,
+  // The type of the last action to be dispatched
+  SetClassificationActionI
+>> = (classification: ClassificationI) => {
+  return async (dispatch: Dispatch) => {
+    const setClassification: SetClassificationActionI = {
+      activeClassification: classification,
+      type: ClassificationActionType.SET_ACTIVE_CLASSIFICATION,
+    };
+    return dispatch(setClassification);
   };
 };

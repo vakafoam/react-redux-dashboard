@@ -58,6 +58,7 @@
 
   .header__navigation {
     display: flex;
+    position: relative;
     flex-wrap: wrap;
     align-self: flex-start;
     margin-top: 30px;
@@ -66,12 +67,26 @@
     cursor: pointer;
 
     .header__navigation__link {
+      position: relative;
       padding: 5px;
       margin-right: 15px;
 
       &.header__navigation__link--active {
         color: $linkActive;
       }
+    }
+
+    .header__popover {
+      position: absolute;
+      top: 30px;
+      right: 0;
+      padding: 10px;
+      background: $fontColor;
+      color: $background;
+      font-size: 1em;
+      z-index: 1;
+      border-radius: 5px;
+      min-width: 40%;
     }
   }
 }

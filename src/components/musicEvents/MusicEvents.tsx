@@ -9,18 +9,27 @@ import {
 import { AppStateI } from "store/state";
 import EventCard from "components/musicEvents/EventCard";
 import "components/musicEvents/musicEvents.scss";
-import { MusicEventI } from "api/interfaces";
+import { MusicEventI, ClassificationI, QueryParamsI } from "api/interfaces";
 
 interface PropsI {
-  getMusicEvents: () => Promise<GotMusicEventsActionI>;
+  activeClassification: ClassificationI;
+  getMusicEvents: (
+    clsId?: string,
+    query?: QueryParamsI
+  ) => Promise<GotMusicEventsActionI>;
   musicEvents: MusicEventI[];
   loading: boolean;
 }
 
-const MusicEvents = ({ getMusicEvents, musicEvents, loading }: PropsI) => {
+const MusicEvents = ({
+  activeClassification,
+  getMusicEvents,
+  musicEvents,
+  loading,
+}: PropsI) => {
   useEffect(() => {
-    getMusicEvents();
-  }, [getMusicEvents]);
+    getMusicEvents(activeClassification.id);
+  }, [activeClassification.id, getMusicEvents]);
 
   return (
     <section className="events">
@@ -39,6 +48,7 @@ const MusicEvents = ({ getMusicEvents, musicEvents, loading }: PropsI) => {
 
 const mapStateToProps = (store: AppStateI) => {
   return {
+    activeClassification: store.activeClassificationState.activeClassification,
     musicEvents: store.musicEventState.musicEvents,
     loading: store.musicEventState.loading,
   };
@@ -46,7 +56,8 @@ const mapStateToProps = (store: AppStateI) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
-    getMusicEvents: () => dispatch(getMusicEventsActionCreator()),
+    getMusicEvents: (clsId?: string, query?: QueryParamsI) =>
+      dispatch(getMusicEventsActionCreator(clsId, query)),
   };
 };
 

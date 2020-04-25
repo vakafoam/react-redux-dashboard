@@ -1,6 +1,17 @@
 import { combineReducers, Reducer } from "redux";
-import { ActionType, DataActions } from "store/actions";
-import { AppStateI, initialDataState, MusicEventStateI } from "store/state";
+import {
+  ActionType,
+  DataActions,
+  ClassificationActionType,
+  SetClassificationActionI,
+} from "store/actions";
+import {
+  AppStateI,
+  initialDataState,
+  MusicEventStateI,
+  ActiveClassificationStateI,
+  initialActiveClassificationState,
+} from "store/state";
 
 const musicEventsReducer: Reducer<MusicEventStateI, DataActions> = (
   state = initialDataState,
@@ -39,9 +50,25 @@ const musicEventsReducer: Reducer<MusicEventStateI, DataActions> = (
   return state;
 };
 
+const activeClassificationReducer: Reducer<
+  ActiveClassificationStateI,
+  SetClassificationActionI
+> = (state = initialActiveClassificationState, action) => {
+  switch (action.type) {
+    case ClassificationActionType.SET_ACTIVE_CLASSIFICATION: {
+      return {
+        activeClassification: action.activeClassification,
+      };
+    }
+    default:
+      return state;
+  }
+};
+
 // tslint:disable-next-line:no-empty
 const neverReached = (never: never) => {};
 
 export const rootReducer = combineReducers<AppStateI>({
   musicEventState: musicEventsReducer,
+  activeClassificationState: activeClassificationReducer,
 });

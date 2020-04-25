@@ -60,3 +60,21 @@ export interface MusicEventsResponseI {
   _links: object;
   page: PaginationI;
 }
+
+export interface ClassificationI {
+  id: string;
+  name: string;
+  _embedded?: object;
+}
+
+export interface ClassificationsResponseI {
+  family: boolean;
+  _links: object;
+  segment: {
+    id: string;
+    name: string;
+    _embedded: {
+      genres: ClassificationI[];
+    };
+  };
+}
