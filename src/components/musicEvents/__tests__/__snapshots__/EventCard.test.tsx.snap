@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventCard should render correctly and match snapshot 1`] = `
+<div>
+  <div
+    class="events__card"
+  >
+    <img
+      alt="Music event"
+      src="http://example2.com"
+    />
+  </div>
+</div>
+`;

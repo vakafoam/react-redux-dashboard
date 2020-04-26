@@ -57,7 +57,6 @@ const Header = ({
         const result: ClassificationI[] =
           res?.result?.segment?._embedded?.genres || [];
         setClassifications([DEFAULT_MENU_ITEM, ...result]);
-        console.log("res", result);
       })
       .catch((er) => console.error("Error occured", er));
   }, []);
@@ -84,6 +83,7 @@ const Header = ({
   };
 
   const onClick = (e: SyntheticEvent, cls: ClassificationI) => {
+    e.stopPropagation();
     setIsPopoverActive(false);
     setActiveClassification(cls);
   };
@@ -92,8 +92,17 @@ const Header = ({
     setIsPopoverActive(false);
   };
 
+  const onMoreClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
+    setIsPopoverActive(!isPopoverActive);
+  };
+
   return (
-    <header className="header" onMouseLeave={onMouseLeave}>
+    <header
+      className="header"
+      onMouseLeave={onMouseLeave}
+      onClick={onMouseLeave}
+    >
       <div className="header__title-search">
         <h1 className="header__title-search__title">Music events</h1>
         <form>
@@ -103,6 +112,7 @@ const Header = ({
             name="keyword"
             onChange={debouncedSearch}
             onKeyDown={keyHandler}
+            placeholder="Search for events.."
           />
         </form>
       </div>
@@ -116,10 +126,7 @@ const Header = ({
           />
         ))}
         {classifications.length > 4 && (
-          <li
-            className="header__navigation__link"
-            onClick={() => setIsPopoverActive(!isPopoverActive)}
-          >
+          <li className="header__navigation__link" onClick={onMoreClick}>
             More...
           </li>
         )}

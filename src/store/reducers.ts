@@ -13,7 +13,7 @@ import {
   initialActiveClassificationState,
 } from "store/state";
 
-const musicEventsReducer: Reducer<MusicEventStateI, DataActions> = (
+export const musicEventsReducer: Reducer<MusicEventStateI, DataActions> = (
   state = initialDataState,
   action
 ) => {
